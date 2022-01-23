@@ -14,7 +14,7 @@ const onclick = async (Drupal) => {
     Drupal.behaviors.sCourseMaterialsFolders();
 
     expanded.forEach(node => {
-        let parnt = document.getElementById(n);
+        let parnt = document.getElementById(node);
         if (parnt != null) {
             parnt.firstChild.firstChild.click();
             Array.from(document.querySelectorAll(".pending")).forEach(e => e.remove());
