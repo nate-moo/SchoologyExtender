@@ -9,7 +9,7 @@ const onclick = async (Drupal) => {
     const html = await (await fetch(uri)).text()
     const DOC = new DOMParser().parseFromString(html, "text/html")
 
-    listRoot.appendChild(parsedElements.querySelector(".full-view.s-js-materials-body.s-js-full-view"))
+    listRoot.appendChild(DOC.querySelector(".full-view.s-js-materials-body.s-js-full-view"))
     console.log("bing bong");
     Drupal.behaviors.sCourseMaterialsFolders();
 
