@@ -1,0 +1,16 @@
+{
+    "name": "Schoology Reload",
+    "description": "Enables reloading the materials page on schoology",
+    "version": "0.1",
+    "manifest_version": 2,
+    "content_scripts": [
+        {
+          "matches": [
+            "https://*.lms.beth.k12.pa.us/*",
+            "https://*.schoology.com/*"
+          ],
+          "js":["index.js"]
+        }
+    ],
+    "permissions":["tabs"]
+}
