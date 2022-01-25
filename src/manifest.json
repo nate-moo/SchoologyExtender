@@ -1,7 +1,7 @@
 {
     "name": "Schoology Reload",
     "description": "Enables reloading the materials page on schoology",
-    "version": "0.1",
+    "version": "0.2",
     "manifest_version": 2,
     "content_scripts": [
         {
@@ -12,5 +12,5 @@
           "js":["index.js"]
         }
     ],
-    "permissions":["tabs"]
+    "permissions":[]
 }
