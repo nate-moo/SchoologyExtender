@@ -2,7 +2,7 @@
     "name": "Schoology Reload",
     "description": "Enables reloading the materials page on schoology",
     "version": "0.2",
-    "manifest_version": 2,
+    "manifest_version": 3,
     "content_scripts": [
         {
           "matches": [
