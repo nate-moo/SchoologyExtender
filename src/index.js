@@ -1,84 +1,70 @@
-main();
+const onclick = async (Drupal) => {
+    let listRemove = document.querySelector("#course-profile-materials-folders");
+    let listRoot = document.querySelector(".s-js-course-materials-full.course-materials-full.sCourse-processed");
+    const expanded = Array.from(document.querySelectorAll("span.expanded")).map(n => n.parentElement.parentElement.id)
+
+    listRemove.remove()
+    let uri = window.location.href
+
+    const html = await (await fetch(uri)).text()
+    const DOC = new DOMParser().parseFromString(html, "text/html")
+
+    listRoot.appendChild(DOC.querySelector(".full-view.s-js-materials-body.s-js-full-view"))
+    console.log("bing bong");
+    Drupal.behaviors.sCourseMaterialsFolders();
+
+    expanded.forEach(node => {
+        let parnt = document.getElementById(node);
+        if (parnt != null) {
+            parnt.firstChild.firstChild.click();
+            Array.from(document.querySelectorAll(".pending")).forEach(e => e.remove());
+         }
+     })
+}
+
+
 
 function main() {
-    let reloadAnchor = document.getElementsByClassName("realm-top-right")[0];
-    let reloadAnchor2 = document.getElementById("toolbar-options-wrapper");
-    let reloadDivElement = document.createElement("div");
-    let reloadElement = document.createElement("a");
-    let reloadElementText = document.createElement("span");
-
-    if (!reloadAnchor) {
-        reloadAnchor = document.getElementById("toolbar-options-wrapper");
-    }
-    reloadElement.classList.add("link-btn");
-    reloadElement.setAttribute("id", "dingus")
-
-    reloadDivElement.style = "float: left;";
-
-    reloadElement.setAttribute("onclick", `
-        let listRemove = document.getElementById("course-profile-materials-folders");
-        let listRoot = document.getElementsByClassName("s-js-course-materials-full course-materials-full sCourse-processed")[0];
-        let expanded = [];
-        document.querySelectorAll("span.expanded").forEach(function(n) {
-            expanded.push(n.parentElement.parentElement.id);
-        })
-        
-        listRemove.remove();
-
-        let uri
-
-        if (document.URL.includes("?f=")){
-            uri = document.URL
-        } else {
-            uri = document.URL
+    if (document.querySelector(".realm-top-right") || document.querySelector("#toolbar-options-wrapper")) {
+        let reloadAnchor = document.querySelector(".realm-top-right");
+        let reloadAnchor2 = document.querySelector("#toolbar-options-wrapper");
+        let reloadDivElement = document.createElement("div");
+        let reloadElement = document.createElement("a");
+        let reloadElementText = document.createElement("span");
+    
+        if (!reloadAnchor) {
+            reloadAnchor = document.querySelector("#toolbar-options-wrapper");
         }
+    
+        reloadElement.classList.add("link-btn");
+        reloadElement.setAttribute("id", "dingus")
+    
+        reloadDivElement.style = "float: left;";
+        
+        reloadElement.setAttribute("onclick", `(${onclick})(Drupal);`)
+        reloadElementText.innerText = "Reload";
+        reloadAnchor.style="max-width: 100%;";
+    
+        reloadElement.appendChild(reloadElementText);
+        reloadDivElement.appendChild(reloadElement);
+        reloadAnchor.appendChild(reloadDivElement);
+    }
 
+    console.log("checking for playposit button")
 
-
-
-        fetch(uri)
-            .then(res => res.text())
-            // .then(res => console.log(res))
-            .then(res => {
-                res = res.toString()
-                let doc = new DOMParser();
-                let parsedElements = doc.parseFromString(res, "text/html");
-                let appendableElements = parsedElements.getElementsByClassName("full-view s-js-materials-body s-js-full-view")[0]
-                // appendableElements.getElementsByTagName("table")[0].id = "folder-contents-table";
-                listRoot.appendChild(appendableElements);
-                // document.getElementsByClassName("s-js-course-materials-simple course-materials-simple")[0].classList = "s-js-course-materials-full course-materials-full"
-                // let main = document.getElementsByClassName("simple-view course-materials-folders")[0]
-                // main.classList = "full-view s-js-materials-body s-js-full-view";
-                // main.setAttribute("id","course-profile-materials-folders");
-                console.log("bing bong");
-                Drupal.behaviors.sCourseMaterialsFolders();
-                
-                expanded.forEach(function (n) {
-                    
-                    let parnt = document.getElementById(n);
-                    if (parnt != null) {
-                        parnt.firstChild.firstChild.click();
-                        let pending = document.getElementsByClassName("pending");
-                        for (let i = 0; i < pending.length; i++) {
-                            pending[i].remove();
-                        }
-                        // expanded.pop(n);
-                    }
-                })
-                
-            });
-            
-    `);
-
-    reloadElementText.innerText = "Reload";
-
-    reloadAnchor.style="max-width: 100%;";
-
-
-
-    reloadElement.appendChild(reloadElementText);
-    reloadDivElement.appendChild(reloadElement);
-    reloadAnchor.appendChild(reloadDivElement);
-    return;
-
+    if (document.getElementsByClassName("fullscreen-option")[0]) {
+        let anchor = document.getElementsByClassName("fullscreen-option")[0];
+        anchor.children[0].remove();
+        let newButton = document.createElement("span");
+        let empty = document.createElement("span");
+        newButton.classList.add("link-btn");
+        newButton.classList.add("fullscreen");
+        //newButton.style.width = "10%";
+        //newButton.style.height = "10%";
+        newButton.appendChild(empty);
+        newButton.setAttribute("onclick", "document.getElementsByTagName('iframe')[0].requestFullscreen()");
+        anchor.appendChild(newButton);
+    }
 }
+
+main();
