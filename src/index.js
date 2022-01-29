@@ -26,10 +26,33 @@ const formReorder = () => {
     console.log("reordering");
 
     // Reordering the comment list
-    let anchor = document.getElementsByClassName("s_comments_level")[0];
+    let anchor = document.querySelectorAll(".s_comments_level:not(.thread-root)")[0];
     let highlighted = document.querySelectorAll(".on-top.comment");
+    const WarnSetter = {"set":true};
     for (let e of highlighted) {
-        anchor.insertBefore(e.parentElement, anchor.firstChild)
+        // console.log(e.parentElement.classList.contains("thread-root"));
+        if (!e.parentElement.classList.contains("thread-root")){
+            anchor.insertBefore(e.parentElement, anchor.firstChild);
+            WarnSetter.set = false
+        } else {
+            console.log("no")
+            if (!document.querySelector("#exists")) {
+                let warnNoTLC = document.createElement("div");
+                warnNoTLC.style.width = "100%";
+                warnNoTLC.id = "exists"; 
+
+                let warnNoTLCText = document.createElement("span");
+                warnNoTLCText.innerText = "No Available Top Level Comments";
+                warnNoTLCText.style.fontSize = "large";
+
+                warnNoTLC.appendChild(warnNoTLCText);
+                
+                document.querySelector(".s-comments-post-form-new").appendChild(warnNoTLC)
+            }
+        }
+        if (!WarnSetter.set) {
+            document.querySelector("#exists").remove();
+        }
     };
 
     // Reordering the dropdown
@@ -39,7 +62,7 @@ const formReorder = () => {
         newanchor.insertBefore(e, newanchor.firstChild)
     };
 }
-
+    
 
 
 function main() {
