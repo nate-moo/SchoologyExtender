@@ -1,7 +1,7 @@
 {
-    "name": "Schoology Reload",
-    "description": "Enables reloading the materials page on schoology",
-    "version": "0.2",
+    "name": "Schoology Extender",
+    "description": "Adds a bunch of useful features to schoology on supports domains, check github for feature list",
+    "version": "0.3",
     "manifest_version": 3,
     "content_scripts": [
         {

@@ -18,8 +18,26 @@ const onclick = async (Drupal) => {
         if (parnt != null) {
             parnt.firstChild.firstChild.click();
             Array.from(document.querySelectorAll(".pending")).forEach(e => e.remove());
-         }
-     })
+        }
+    })
+}
+
+const formReorder = () => {
+    console.log("reordering");
+
+    // Reordering the comment list
+    let anchor = document.getElementsByClassName("s_comments_level")[0];
+    let highlighted = document.querySelectorAll(".on-top.comment");
+    for (let e of highlighted) {
+        anchor.insertBefore(e.parentElement, anchor.firstChild)
+    };
+
+    // Reordering the dropdown
+    let newanchor = document.getElementById("discussion-user-stats").firstChild;
+    let newhighlighted = document.querySelectorAll(".on-top.discussion-user-filter");
+    for (let e of newhighlighted) {
+        newanchor.insertBefore(e, newanchor.firstChild)
+    };
 }
 
 
@@ -64,6 +82,15 @@ function main() {
         newButton.appendChild(empty);
         newButton.setAttribute("onclick", "document.getElementsByTagName('iframe')[0].requestFullscreen()");
         anchor.appendChild(newButton);
+    }
+
+    console.log("checking if inside a discussion board");
+
+    if (document.getElementById("s_comments")) {
+        let htmlCollectionList = document.getElementById("discussion-user-stats").children[0].children
+        for (let item of htmlCollectionList) {
+            item.setAttribute("onclick", `(${formReorder})(Drupal);`)
+        }
     }
 }
 
