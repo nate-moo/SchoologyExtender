@@ -66,6 +66,8 @@ const formReorder = () => {
 
 
 function main() {
+
+    // Adding reload button
     if (document.querySelector(".realm-top-right") || document.querySelector("#toolbar-options-wrapper")) {
         let reloadAnchor = document.querySelector(".realm-top-right");
         let reloadAnchor2 = document.querySelector("#toolbar-options-wrapper");
