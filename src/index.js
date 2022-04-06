@@ -10,7 +10,6 @@ const onclick = async (Drupal) => {
     const DOC = new DOMParser().parseFromString(html, "text/html")
 
     listRoot.appendChild(DOC.querySelector(".full-view.s-js-materials-body.s-js-full-view"))
-    console.log("bing bong");
     Drupal.behaviors.sCourseMaterialsFolders();
 
     expanded.forEach(node => {
@@ -35,7 +34,6 @@ const formReorder = () => {
             anchor.insertBefore(e.parentElement, anchor.firstChild);
             WarnSetter.set = false
         } else {
-            console.log("no")
             if (!document.querySelector("#exists")) {
                 let warnNoTLC = document.createElement("div");
                 warnNoTLC.style.width = "100%";
@@ -63,10 +61,32 @@ const formReorder = () => {
     };
 }
     
+async function getEmails(anchor) {
+    let uri = window.location.href.replace("materials", "members");
+    fetch(uri)
+        .then((res) => res.text())
+        .then((res) => {
+            const DOC = new DOMParser().parseFromString(res, "text/html");
+            let courseAdmins = DOC.querySelectorAll(".enrollment-admin");
+            for (let admin of courseAdmins){
+                fetch(window.location.origin + "/user/" + admin.id + "/info")
+                    .then((res) => res.text())
+                    .then((res) => {
+                    const userDOC = new DOMParser().parseFromString(res, "text/html");
+                    let emailText = userDOC.getElementsByClassName("email")[0].firstChild.innerText;
+                    let emailsContainer = document.createElement("dl");
+                    let emailsElement = document.createElement("a");
+                        emailsElement.innerText = emailText;
+                        emailsElement.href = "mailto:" + emailText;
 
+                    emailsContainer.appendChild(emailsElement);
+                    anchor.appendChild(emailsContainer);
+                });
+            }
+        });
+}
 
-function main() {
-
+async function main() {
     // Adding reload button
     if (document.querySelector(".realm-top-right") || document.querySelector("#toolbar-options-wrapper")) {
         let reloadAnchor = document.querySelector(".realm-top-right");
@@ -101,8 +121,6 @@ function main() {
         let empty = document.createElement("span");
         newButton.classList.add("link-btn");
         newButton.classList.add("fullscreen");
-        //newButton.style.width = "10%";
-        //newButton.style.height = "10%";
         newButton.appendChild(empty);
         newButton.setAttribute("onclick", "document.getElementsByTagName('iframe')[0].requestFullscreen()");
         anchor.appendChild(newButton);
@@ -116,6 +134,31 @@ function main() {
             item.setAttribute("onclick", `(${formReorder})(Drupal);`)
         }
     }
+
+    console.log("Checking for sidebar");
+    // 
+    let sidebar = document.querySelector("#left-nav");
+    if (sidebar) {
+        let information = document
+            .querySelector("#content-left")
+            .querySelector(".left-block-wrapper");
+        
+        let email = document.createElement("h3");
+            email.classList = "h3-med-flat";
+            email.innerText = "Emails";
+        
+        let emailsDivContainer = document.createElement("div");
+            emailsDivContainer.classList = "course-info-wrapper sCourse-processed";
+        
+        let emailsLeftBlock = document.createElement("div");
+            emailsLeftBlock.classList = "left-block";
+
+        emailsLeftBlock.appendChild(emailsDivContainer);
+        information.append(email);
+        information.append(emailsLeftBlock);
+
+        await getEmails(emailsLeftBlock)
+        }
 }
 
 main();
