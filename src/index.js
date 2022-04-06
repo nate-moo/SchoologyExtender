@@ -60,6 +60,21 @@ const formReorder = () => {
         newanchor.insertBefore(e, newanchor.firstChild)
     };
 }
+
+const saveButtonFunc = () => {
+    let text = document.querySelector("#edit-comment_ifr").contentWindow.document.body.innerHTML;
+    console.log(text);
+    let Path = window.location.pathname.split("/");
+    let saveKey = Path[2] + "-" + Path[6];
+    localStorage.setItem(saveKey, text);
+}
+
+const restoreButtonFunc = () => {
+    let Path = window.location.pathname.split("/");
+    let saveKey = Path[2] + "-" + Path[6];
+    let text = localStorage.getItem(saveKey)
+    document.querySelector("#edit-comment_ifr").contentWindow.document.body.innerHTML = text;
+}
     
 async function getEmails(anchor) {
     let uri = window.location.href.replace("materials", "members");
@@ -133,6 +148,30 @@ async function main() {
         for (let item of htmlCollectionList) {
             item.setAttribute("onclick", `(${formReorder})(Drupal);`)
         }
+
+        let submitButton = document.querySelector("#edit-submit");
+
+        let saveButtonWrapper = document.createElement("span");
+        let saveButton = document.createElement("h3");
+        saveButtonWrapper.classList = "link-btn";
+        saveButtonWrapper.style = "margin-top: 10px; margin-left: 6px;";
+        saveButton.innerText = "Save";
+        saveButton.setAttribute("type", "submit")
+        saveButton.style = "padding-left: 0.1rem;";
+        saveButton.setAttribute("onclick", `(${saveButtonFunc})()`)
+        saveButtonWrapper.appendChild(saveButton);
+        submitButton.parentElement.parentElement.appendChild(saveButtonWrapper);
+
+        let restoreButtonWrapper = document.createElement("span");
+        let restoreButton = document.createElement("h3");
+        restoreButtonWrapper.classList = "link-btn";
+        restoreButtonWrapper.style = "margin-top: 10px; margin-left: 6px;";
+        restoreButton.innerText = "Restore";
+        restoreButton.setAttribute("type", "submit")
+        restoreButton.style = "padding-left: 0.1rem;";
+        restoreButton.setAttribute("onclick", `(${restoreButtonFunc})()`)
+        restoreButtonWrapper.appendChild(restoreButton);
+        submitButton.parentElement.parentElement.appendChild(restoreButtonWrapper);
     }
 
     console.log("Checking for sidebar");
