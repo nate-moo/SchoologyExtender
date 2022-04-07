@@ -10,6 +10,6 @@ This extension supports both chromium based browsers and firefox based browsers,
   - Adds an email section to the sidebar in the materials view
 ## Usage
 ### Chromium-based
- - change manifest version to 3 if its not alread
+ - change manifest version to 3 if its not already
 ### Firefox-based
- - change manifest version to 2 if its not alread
+ - change manifest version to 2 if its not already
