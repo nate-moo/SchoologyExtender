@@ -2,7 +2,7 @@
     "name": "Schoology Extender",
     "description": "Adds a bunch of useful features to schoology on supported domains, check github for feature list",
     "version": "0.6",
-    "manifest_version": 3,
+    "manifest_version": 2,
     "content_scripts": [
         {
           "matches": [

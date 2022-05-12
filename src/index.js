@@ -1,4 +1,4 @@
-const onclick = async (Drupal) => {
+const reload = async (Drupal) => {
     let listRemove = document.querySelector("#course-profile-materials-folders");
     let listRoot = document.querySelector(".s-js-course-materials-full.course-materials-full.sCourse-processed");
     const expanded = Array.from(document.querySelectorAll("span.expanded")).map(n => n.parentElement.parentElement.id)
@@ -51,29 +51,29 @@ const formReorder = () => {
         if (!WarnSetter.set) {
             document.querySelector("#exists").remove();
         }
-    };
+    }
 
     // Reordering the dropdown
     let newanchor = document.getElementById("discussion-user-stats").firstChild;
     let newhighlighted = document.querySelectorAll(".on-top.discussion-user-filter");
     for (let e of newhighlighted) {
         newanchor.insertBefore(e, newanchor.firstChild)
-    };
+    }
 }
 
-const saveButtonFunc = () => {
-    let text = document.querySelector("#edit-comment_ifr").contentWindow.document.body.innerHTML;
+const saveButtonFunc = (itr) => {
+    let text = document.querySelectorAll(".mceIframeContainer")[itr].children[0].contentWindow.document.body.innerHTML;
     console.log(text);
     let Path = window.location.pathname.split("/");
-    let saveKey = Path[2] + "-" + Path[6];
+    let saveKey = Path[2] + "-" + Path[6] + "-" + itr;
     localStorage.setItem(saveKey, text);
 }
 
-const restoreButtonFunc = () => {
+const restoreButtonFunc = (itr) => {
     let Path = window.location.pathname.split("/");
-    let saveKey = Path[2] + "-" + Path[6];
+    let saveKey = Path[2] + "-" + Path[6] + "-" + itr;
     let text = localStorage.getItem(saveKey)
-    document.querySelector("#edit-comment_ifr").contentWindow.document.body.innerHTML = text;
+    document.querySelectorAll(".mceIframeContainer")[itr].children[0].contentWindow.document.body.innerHTML = text;
 }
     
 async function getEmails(anchor) {
@@ -101,6 +101,34 @@ async function getEmails(anchor) {
         });
 }
 
+function saveButtonC(itr) {
+    let saveButtonWrapper = document.createElement("span");
+    let saveButton = document.createElement("h3");
+    saveButtonWrapper.classList = "link-btn";
+    saveButtonWrapper.style = "margin-top: 10px; margin-left: 6px;";
+    saveButton.innerText = "Save";
+    saveButton.setAttribute("type", "submit")
+    saveButton.style = "padding-left: 0.1rem;";
+    saveButton.setAttribute("onclick", `(${saveButtonFunc})(${itr})`)
+    return [saveButtonWrapper, saveButton]
+    //saveButtonWrapper.appendChild(saveButton);
+    //submitButton.parentElement.parentElement.appendChild(saveButtonWrapper);
+}
+function restoreButtonC(submitButton, itr) {
+    let restoreButtonWrapper = document.createElement("span");
+    let restoreButton = document.createElement("h3");
+    restoreButtonWrapper.classList = "link-btn";
+    restoreButtonWrapper.style = "margin-top: 10px; margin-left: 6px;";
+    restoreButton.innerText = "Restore";
+    restoreButton.setAttribute("type", "submit")
+    restoreButton.style = "padding-left: 0.1rem;";
+    restoreButton.setAttribute("onclick", `(${restoreButtonFunc})(${itr})`)
+    return [restoreButtonWrapper, restoreButton]
+    //restoreButtonWrapper.appendChild(restoreButton);
+    //submitButton.parentElement.parentElement.appendChild(restoreButtonWrapper);
+}
+
+
 async function main() {
     // Adding reload button
     if (document.querySelector(".realm-top-right") || document.querySelector("#toolbar-options-wrapper")) {
@@ -118,7 +146,7 @@ async function main() {
     
         reloadDivElement.style = "float: left;";
         
-        reloadElement.setAttribute("onclick", `(${onclick})(Drupal);`)
+        reloadElement.setAttribute("onclick", `(${reload})(Drupal);`)
         reloadElementText.innerText = "Reload";
         reloadAnchor.style="max-width: 100%;";
     
@@ -149,29 +177,16 @@ async function main() {
             item.setAttribute("onclick", `(${formReorder})(Drupal);`)
         }
 
-        let submitButton = document.querySelector("#edit-submit");
+        let submitButtons = document.querySelectorAll(".form-submit");
+        for (let [itr, el] of submitButtons.entries()) {
+            let [saveWrapper, save] = saveButtonC(itr);
+            let [restoreWrapper, restore] = restoreButtonC(save, itr);
+            saveWrapper.appendChild(save);
+            el.parentElement.parentElement.appendChild(saveWrapper);
+            restoreWrapper.appendChild(restore);
+            el.parentElement.parentElement.appendChild(restoreWrapper);
+        } 
 
-        let saveButtonWrapper = document.createElement("span");
-        let saveButton = document.createElement("h3");
-        saveButtonWrapper.classList = "link-btn";
-        saveButtonWrapper.style = "margin-top: 10px; margin-left: 6px;";
-        saveButton.innerText = "Save";
-        saveButton.setAttribute("type", "submit")
-        saveButton.style = "padding-left: 0.1rem;";
-        saveButton.setAttribute("onclick", `(${saveButtonFunc})()`)
-        saveButtonWrapper.appendChild(saveButton);
-        submitButton.parentElement.parentElement.appendChild(saveButtonWrapper);
-
-        let restoreButtonWrapper = document.createElement("span");
-        let restoreButton = document.createElement("h3");
-        restoreButtonWrapper.classList = "link-btn";
-        restoreButtonWrapper.style = "margin-top: 10px; margin-left: 6px;";
-        restoreButton.innerText = "Restore";
-        restoreButton.setAttribute("type", "submit")
-        restoreButton.style = "padding-left: 0.1rem;";
-        restoreButton.setAttribute("onclick", `(${restoreButtonFunc})()`)
-        restoreButtonWrapper.appendChild(restoreButton);
-        submitButton.parentElement.parentElement.appendChild(restoreButtonWrapper);
     }
 
     console.log("Checking for sidebar");
