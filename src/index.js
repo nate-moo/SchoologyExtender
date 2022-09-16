@@ -211,8 +211,29 @@ async function main() {
         information.append(email);
         information.append(emailsLeftBlock);
 
-        await getEmails(emailsLeftBlock)
-        }
+        await getEmails(emailsLeftBlock);
+        //
+        console.log("Checking date information");
+        let gradePeriodElem = document.querySelector(".course-info-wrapper > dl > dd");
+
+        let dayCount1 = ((Date.parse(gradePeriodElem.textContent.split(",")[0].split(" - ")[1]) - new Date().getTime())/1000/60/60/24/7).toFixed(1);
+        if (dayCount1 < 0) { dayCount1 = "Past" }
+        
+        gradePeriodElem.textContent.split(",").forEach((i) => {
+            let dayCount = ((Date.parse(i.split(" - ")[1]) - new Date().getTime())/1000/60/60/24/7).toFixed(1);
+            if (dayCount < 0) { dayCount = "Past" };
+            let dayCountElem = document.createElement("dd");
+                dayCountElem.innerText = dayCount;
+                dayCountElem.title =  dayCount*7 + " Days"
+            let dayCountElemTitle = document.createElement("dt");
+                dayCountElemTitle.innerText = "Weeks left in " + i.trim().substring(0,3);
+                gradePeriodElem.parentElement.appendChild(dayCountElemTitle);
+                gradePeriodElem.parentElement.appendChild(dayCountElem);
+        })
+        
+        information.querySelector("h3").innerText = "Grading Period";
+    }
+    
 }
 
 main();
