@@ -16,5 +16,10 @@
           "js":["index.js"]
         }
     ],
-    "permissions":[]
+    "permissions":[],
+    "browser_specific_settings": {
+    "gecko": {
+        "update_url": "tbd"
+    }
+}
 }
