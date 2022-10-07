@@ -16,6 +16,7 @@
           "js":["index.js"]
         }
     ],
+    "action": { "default_icon": "favicon.png" },
     "permissions":[],
     "browser_specific_settings": {
     "gecko": {
