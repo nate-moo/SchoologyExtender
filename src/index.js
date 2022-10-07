@@ -77,28 +77,46 @@ const restoreButtonFunc = (itr) => {
 }
     
 async function getEmails(anchor) {
-    let uri = window.location.href.replace("materials", "members");
-    fetch(uri)
-        .then((res) => res.text())
-        .then((res) => {
-            const DOC = new DOMParser().parseFromString(res, "text/html");
-            let courseAdmins = DOC.querySelectorAll(".enrollment-admin");
-            for (let admin of courseAdmins){
-                fetch(window.location.origin + "/user/" + admin.id + "/info")
-                    .then((res) => res.text())
-                    .then((res) => {
-                    const userDOC = new DOMParser().parseFromString(res, "text/html");
-                    let emailText = userDOC.getElementsByClassName("email")[0].firstChild.innerText;
-                    let emailsContainer = document.createElement("dl");
-                    let emailsElement = document.createElement("a");
-                        emailsElement.innerText = emailText;
-                        emailsElement.href = "mailto:" + emailText;
+    let Path = window.location.pathname.split("/");
+    let emailKey = Path[2] + "-" + "course-emails";
+    let emailText = sessionStorage.getItem(emailKey)
 
-                    emailsContainer.appendChild(emailsElement);
-                    anchor.appendChild(emailsContainer);
-                });
-            }
-        });
+    if (emailText === null) {
+        let uri = window.location.href.replace("materials", "members");
+        fetch(uri)
+            .then((res) => res.text())
+            .then((res) => {
+                const DOC = new DOMParser().parseFromString(res, "text/html");
+                let courseAdmins = DOC.querySelectorAll(".enrollment-admin");
+                for (let admin of courseAdmins){
+                    fetch(window.location.origin + "/user/" + admin.id + "/info")
+                        .then((res) => res.text())
+                        .then((res) => {
+                        const userDOC = new DOMParser().parseFromString(res, "text/html");
+                        emailText = userDOC.getElementsByClassName("email")[0].firstChild.innerText;
+                        let emailsContainer = document.createElement("dl");
+                        let emailsElement = document.createElement("a");
+                            emailsElement.innerText = emailText;
+                            emailsElement.href = "mailto:" + emailText;
+    
+                        emailsContainer.appendChild(emailsElement);
+                        anchor.appendChild(emailsContainer);
+                        
+                        sessionStorage.setItem(emailKey, emailText);
+                    });
+                }
+            });
+    } else {
+        let emailsContainer = document.createElement("dl");
+        let emailsElement = document.createElement("a");
+            emailsElement.innerText = emailText;
+            emailsElement.href = "mailto:" + emailText;
+    
+        emailsContainer.appendChild(emailsElement);
+        anchor.appendChild(emailsContainer);
+    }
+
+    
 }
 
 function saveButtonC(itr) {
