@@ -1,10 +1,10 @@
 {
   "addons": {
-    "{tbd}": {
+    "{071cd33e-b344-4be8-834a-4f988dee459d}": {
       "updates": [
         {
-          "version": "6.6.6",
-          "update_link": "tbd"
+          "version": "0.8",
+          "update_link": "https://addons.mozilla.org/firefox/downloads/file/4004148/schoology_extender-0.8.xpi"
         }
       ]
     }
