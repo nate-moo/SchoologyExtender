@@ -14,5 +14,3 @@ This extension supports both chromium based browsers and firefox based browsers,
  - change manifest version to 3 if its not already
 ### Firefox-based
  - change manifest version to 2 if its not already
-### Both:
- - Use the premade extension packages in the releases tab
