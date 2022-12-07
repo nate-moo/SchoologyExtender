@@ -222,10 +222,14 @@ async function main() {
         
         gradePeriodElem.textContent.split(",").forEach((i) => {
             let dayCount = ((Date.parse(i.split(" - ")[1]) - new Date().getTime())/1000/60/60/24/7).toFixed(1);
-            if (dayCount < 0) { dayCount = "Past" };
+            
             let dayCountElem = document.createElement("dd");
-                dayCountElem.innerText = dayCount;
+            if (dayCount > 0) {;
+                dayCountElem.innerText = (dayCount.split(".")[0]) + " Weeks " + ((dayCount * 7) % 7).toFixed(1) + " Days";
                 dayCountElem.title =  dayCount*7 + " Days"
+            } else {
+                dayCountElem.innerText = "Past";
+            }
             let dayCountElemTitle = document.createElement("dt");
                 dayCountElemTitle.innerText = "Weeks left in " + i.trim().substring(0,3);
                 gradePeriodElem.parentElement.appendChild(dayCountElemTitle);
