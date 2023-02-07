@@ -226,7 +226,7 @@ async function main() {
             let dayCountElem = document.createElement("dd");
             if (dayCount > 0) {;
                 dayCountElem.innerText = (dayCount.split(".")[0]) + " Weeks " + ((dayCount * 7) % 7).toFixed(1) + " Days";
-                dayCountElem.title =  dayCount*7 + " Days"
+                dayCountElem.title =  (a%7 + (Number(String(a/7).split(".")[0])*5)) + " Days"
             } else {
                 dayCountElem.innerText = "Past";
             }
