@@ -1,7 +1,7 @@
 {
     "name": "Schoology Extender",
     "description": "Adds a bunch of useful features to schoology on supported domains, check github for feature list",
-    "version": "0.8.1",
+    "version": "0.8.2",
     "manifest_version": 3,
     "content_scripts": [
         {
@@ -9,6 +9,7 @@
             "https://lms.beth.k12.pa.us/external_tool/*/launch",
             "https://lms.beth.k12.pa.us/course/*/materials*",
             "https://lms.beth.k12.pa.us/course/*/materials/discussion/view/*",
+            "https://lms.beth.k12.pa.us/*",
             "https://schoology.com/external_tool/*/launch",
             "https://schoology.com/course/*/materials*",
             "https://schoology.com/course/*/materials/discussion/view/*"

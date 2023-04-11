@@ -221,11 +221,11 @@ async function main() {
         if (dayCount1 < 0) { dayCount1 = "Past" }
         
         gradePeriodElem.textContent.split(",").forEach((i) => {
-            let dayCount = ((Date.parse(i.split(" - ")[1]) - new Date().getTime())/1000/60/60/24/7).toFixed(1);
+            let dayCount = Math.ceil((Date.parse(i.split(" - ")[1]) - (new Date().getTime() - ((new Date().getTimezoneOffset()*60*1000))))/1000/60/60/24/7).toFixed(1);
             
             let dayCountElem = document.createElement("dd");
             if (dayCount > 0) {;
-                dayCountElem.innerText = (dayCount.split(".")[0]) + " Weeks " + ((dayCount * 7) % 7).toFixed(1) + " Days";
+                dayCountElem.innerText = (dayCount.split(".")[0]) + " Weeks " + Math.ceil(((dayCount * 7) % 7).toFixed(1)) + " Days";
                 dayCountElem.title =  dayCount*7 + " Days"
             } else {
                 dayCountElem.innerText = "Past";
